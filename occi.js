@@ -77,7 +77,7 @@ $(function() {
 						'<div class="item"><span class="link">'+item+'</span> ' +
 						'<span class="item-actions"><button name="compute-get">GET</button> ' +
 						'<button disabled="disabled" class="locked">PUT</button> ' +
-						'<button disabled="disabled" class="locked">DELETE</button></span></div>'
+						'<button name="compute-delete">DELETE</button></span></div>'
 					);
 				});
 				if ($('div#resources-compute div.item').size() > 0) {
@@ -103,6 +103,9 @@ $(function() {
 		};
 		// send request
 		occiRequest("POST", "/compute", ["Accept: text/plain", "X-OCCI-Attribute: occi.compute.Category=compute occi.compute.architecture="+attr.architecture+" occi.compute.cores="+attr.cores+" occi.compute.hostname="+attr.hostname+" occi.compute.memory="+attr.memory+" occi.compute.speed="+attr.speed]);
+	});
+	$('button[name="compute-delete"]').live('click', function(event){
+		occiRequest("DELETE", $(this).parents('div.item').children('span.link').text(), ["Accept: text/plain"]);
 	});
 });
 
