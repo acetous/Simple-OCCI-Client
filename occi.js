@@ -76,7 +76,7 @@ $(function() {
 					$('div#resources-compute').append(
 						'<div class="item"><span class="link">'+item+'</span> ' +
 						'<span class="item-actions"><button name="compute-get">GET</button> ' +
-						'<button disabled="disabled" class="locked">PUT</button> ' +
+						'<button name="compute-put">PUT</button> ' +
 						'<button name="compute-delete">DELETE</button></span></div>'
 					);
 				});
@@ -106,6 +106,19 @@ $(function() {
 	});
 	$('button[name="compute-delete"]').live('click', function(event){
 		occiRequest("DELETE", $(this).parents('div.item').children('span.link').text(), ["Accept: text/plain"]);
+	});
+	$('button[name="compute-put"]').live('click', function(event){
+		// ask for data
+		// TODO: validate input, use present values as default
+		var attr = {
+			architecture: promptSecure("Architecture", "x86"),
+			cores: promptSecure("Cores", "2"),
+			speed: promptSecure("Speed", "2.4"),
+			hostname: promptSecure("Hostname", "compute-"+new Date().getTime()),
+			memory: promptSecure("Memory", "2.0")
+		};
+		// send request
+		occiRequest("PUT", $(this).parents('div.item').children('span.link').text(), ["Accept: text/plain", "X-OCCI-Attribute: occi.compute.Category=compute occi.compute.architecture="+attr.architecture+" occi.compute.cores="+attr.cores+" occi.compute.hostname="+attr.hostname+" occi.compute.memory="+attr.memory+" occi.compute.speed="+attr.speed]);
 	});
 });
 
