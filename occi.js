@@ -94,7 +94,6 @@ function occiRequest(method, resource, headers, data) {
 	
 	// add Content-Type header for POST requests to prevent Bad Request errors
 	if (method == "POST" && typeof data == "undefined") {
-		alert("adding content type");
 		headers.push("Content-Type: text/plain");
 	}
 	
