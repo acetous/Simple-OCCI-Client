@@ -64,7 +64,17 @@ $(function() {
 		occiRequest("GET", "/compute/", ["Accept: text/plain"]);
 	});
 	$('button[name="compute-post"]').click(function(event){
-		occiRequest("POST", "/compute", ["X-OCCI-Attribute: occi.compute.Category=compute occi.compute.architecture=x86 occi.compute.cores=2 occi.compute.hostname=test occi.compute.memory=2.0 occi.compute.speed=2.4"]);
+		// ask for data
+		// TODO: validate input 
+		var attr = {
+			architecture: promptSecure("Architecture", "x86"),
+			cores: promptSecure("Cores", "2"),
+			speed: promptSecure("Speed", "2.4"),
+			hostname: promptSecure("Hostname", "compute-"+new Date().getTime()),
+			memory: promptSecure("Memory", "2.0")
+		};
+		// send request
+		occiRequest("POST", "/compute", ["Accept: text/plain", "X-OCCI-Attribute: occi.compute.Category=compute occi.compute.architecture="+attr.architecture+" occi.compute.cores="+attr.cores+" occi.compute.hostname="+attr.hostname+" occi.compute.memory="+attr.memory+" occi.compute.speed="+attr.speed]);
 	});
 });
 
