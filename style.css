@@ -56,3 +56,12 @@ div#request pre, div#response pre {
 .error {
 	border: 2px solid red;
 }
+
+div#resources span.link {
+	font-family: monospace;
+	padding: 0 10px;
+}
+
+button.clear {
+	float: right;
+}

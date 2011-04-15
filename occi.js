@@ -32,6 +32,10 @@ $(function() {
 	 * Init
 	 */
 	$('div.loader').hide();
+	$('button.clear').live('click', function(event){
+		$(this).hide();
+		$(this).parent('div').children('div.item').remove();
+	});
 	
 	/**
 	 * Check OCCI root
@@ -60,8 +64,32 @@ $(function() {
 	/**
 	 * Compute
 	 */
-	$('button[name="compute-get"]').click(function(event){
-		occiRequest("GET", "/compute/", ["Accept: text/plain"]);
+	$('button[name="compute-get"]').live('click', function(event){
+		if ($(this).parents('div#resources').size() == 0) {
+			// GET all resources
+			occiRequest("GET", "/compute/", ["Accept: text/plain"], null, function(data, status, xhr) {
+				$('div#resources-compute div.item').remove();
+				jQuery.each(data.split(","), function(index, item){
+					if (jQuery.trim(item).empty()) {
+						return;
+					}
+					$('div#resources-compute').append(
+						'<div class="item"><span class="link">'+item+'</span> ' +
+						'<span class="item-actions"><button name="compute-get">GET</button> ' +
+						'<button disabled="disabled" class="locked">PUT</button> ' +
+						'<button disabled="disabled" class="locked">DELETE</button></span></div>'
+					);
+				});
+				if ($('div#resources-compute div.item').size() > 0) {
+					$('div#resources-compute button.clear').show();
+				} else {
+					$('div#resources-compute button.clear').hide();
+				}
+			});
+		} else {
+			// GET a specific resource
+			occiRequest("GET", $(this).parents('div.item').children('span.link').text(), ["Accept: text/plain"]);
+		}
 	});
 	$('button[name="compute-post"]').click(function(event){
 		// ask for data
@@ -84,14 +112,20 @@ $(function() {
  * @param resource the resource to request, e.g. "/compute"
  * @param headers array of header-strings, e.g. ["Accept: text/plain"]
  * @param data
+ * @param callback a callback function to be called after a successful request
  * @returns {Boolean} true if request could be send
  */
-function occiRequest(method, resource, headers, data) {
+function occiRequest(method, resource, headers, data, callback) {
 	// clear fields and show loader
 	$("div#request pre").text("");
 	$("div#response pre").text("");
 	$("div#request div.loader").show();
 	$("div#response div.loader").show();
+	
+	// strip occi_root from resource
+	if (resource.indexOf(occi_root) == 0) {
+		resource = resource.substring(occi_root.length);
+	}
 	
 	// render request
 	renderRequest(method, resource, headers, data);
@@ -103,7 +137,7 @@ function occiRequest(method, resource, headers, data) {
 	}
 	
 	// add Content-Type header for POST requests to prevent Bad Request errors
-	if (method == "POST" && typeof data == "undefined") {
+	if (method == "POST" && (typeof data == "undefined" || data == null)) {
 		headers.push("Content-Type: text/plain");
 	}
 	
@@ -130,6 +164,9 @@ function occiRequest(method, resource, headers, data) {
 		},
 		success: function(data, status, xhr) {
 			renderResponse(data, status, xhr);
+			if (typeof callback == "function") {
+				callback(data, status, xhr);
+			}
 		}
 	});
 	return true;
