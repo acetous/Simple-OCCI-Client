@@ -6,6 +6,17 @@ Since the addon is not released yet, you need to install it all by yourself from
 
 ## How to install
 
+When this extension reaches a stable version, it will be offered on Google's Chrome extensions page.
+
+### The last snapshot preview
+
+1. Remove a previous install snapshot release of this extension (right-click the icon and choose "Uninstall").
+1. Click on Downloads on [GitHub](https://github.com/acetous/Simple-OCCI-Client).
+1. Choose your snapshot release (it's a crx-file).
+1. Google Chrome should ask to install the extension instead of downloading the file.
+
+### The cutting edge development version
+
 1. Download the source from GitHub (Downloads -> Download Source) and extract it.
 1. Open the Extensions options page in Google Chrome.
 1. Click on "Developer mode" (top right corner).
