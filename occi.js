@@ -74,10 +74,14 @@ $(function() {
 						return;
 					}
 					$('div#resources-compute').append(
-						'<div class="item"><span class="link">'+item+'</span> ' +
-						'<span class="item-actions"><button name="compute-get">GET</button> ' +
+						'<div class="item"><span class="link">'+item+'</span> <span class="item-actions"> ' +
+						'<button name="compute-get">GET</button> ' +
 						'<button name="compute-put">PUT</button> ' +
-						'<button name="compute-delete">DELETE</button></span></div>'
+						'<button name="compute-delete">DELETE</button> ' +
+						'&nbsp;&nbsp;&nbsp;' +
+						'<button name="compute-start">START</button> ' +
+						'<button name="compute-stop">STOP</button> ' +
+						'</span></div>'
 					);
 				});
 				if ($('div#resources-compute div.item').size() > 0) {
@@ -119,6 +123,12 @@ $(function() {
 		};
 		// send request
 		occiRequest("PUT", $(this).parents('div.item').children('span.link').text(), ["Accept: text/plain", "X-OCCI-Attribute: occi.compute.Category=compute occi.compute.architecture="+attr.architecture+" occi.compute.cores="+attr.cores+" occi.compute.hostname="+attr.hostname+" occi.compute.memory="+attr.memory+" occi.compute.speed="+attr.speed]);
+	});
+	$('button[name="compute-start"]').live('click', function(event){
+		occiRequest("POST", $(this).parents('div.item').children('span.link').text() + '/?action=start', ['Accept: text/plain', 'Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; class="action";', 'X-OCCI-Attribute: method=start']);
+	});
+	$('button[name="compute-stop"]').live('click', function(event){
+		occiRequest("POST", $(this).parents('div.item').children('span.link').text() + '/?action=stop', ['Accept: text/plain', 'Category: compute; scheme="http://schemas.ogf.org/occi/infrastructure#"; class="action";', 'X-OCCI-Attribute: method=poweroff']);
 	});
 });
 
