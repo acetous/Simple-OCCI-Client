@@ -69,3 +69,8 @@ div#resources span.link {
 button.clear {
 	float: right;
 }
+
+div#credits {
+	text-align: center;
+	font-size: 90%;
+}
