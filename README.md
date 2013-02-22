@@ -10,6 +10,9 @@ When this extension reaches a stable version, it will be offered on Google's Chr
 
 ### The last snapshot preview
 
+This method is now unsupported. Chrome does not allow the installation of plugins from 3rd party sources any more.
+See "The cutting edge development version" for another way to install the extension.
+
 1. Remove a previous install snapshot release of this extension (right-click the icon and choose "Uninstall").
 1. Click on Downloads on [GitHub](https://github.com/acetous/Simple-OCCI-Client).
 1. Choose your snapshot release (it's a crx-file).
